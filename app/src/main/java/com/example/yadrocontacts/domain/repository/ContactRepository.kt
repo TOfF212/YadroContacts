@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import com.example.yadrocontacts.domain.util.Result
 
 interface ContactRepository {
-    suspend fun getContacts(): Flow<Result<List<Contact>>>
-    suspend fun getRepeatContacts(): Flow<Result<List<Contact>>>
-    suspend fun deleteContact(contactId: String): Flow<Result<Unit>>
+     fun getContacts(): Flow<Result<List<Contact>>>
+     fun getRepeatContacts(): Flow<Result<List<Contact>>>
+     fun deleteContact(contactId: String): Flow<Result<Unit>>
 }

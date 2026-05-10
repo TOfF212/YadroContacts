@@ -1,4 +1,7 @@
 package com.example.yadrocontacts.presentation.screens.contactsList.entity
 
-class PresentationContact {
-}
+data class PresentationContact (
+    val id: Long,
+    val name: String,
+    val phone: String
+)

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 class DeleteRepeatContacts
 @Inject constructor(private val repository: ContactRepository){
 
-    suspend operator fun invoke(contactIds: List<String>) = flow {
+     operator fun invoke(contactIds: List<String>) = flow {
         emit(Result.Loading)
 
         contactIds.forEach { contactId ->

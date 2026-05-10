@@ -5,5 +5,5 @@ import jakarta.inject.Inject
 
 class GetContacts @Inject constructor(private val repository: ContactRepository){
 
-    suspend operator fun invoke() = repository.getContacts()
+     operator fun invoke() = repository.getContacts()
 }
