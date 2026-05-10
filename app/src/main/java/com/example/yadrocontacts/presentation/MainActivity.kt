@@ -1,4 +1,4 @@
-package com.example.yadrocontacts
+package com.example.yadrocontacts.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
