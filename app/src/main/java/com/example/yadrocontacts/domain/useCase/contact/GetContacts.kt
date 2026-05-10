@@ -1,4 +1,9 @@
 package com.example.yadrocontacts.domain.useCase.contact
 
-class GetContacts {
+import com.example.yadrocontacts.domain.repository.ContactRepository
+import jakarta.inject.Inject
+
+class GetContacts @Inject constructor(private val repository: ContactRepository){
+
+    suspend operator fun invoke() = repository.getContacts()
 }
