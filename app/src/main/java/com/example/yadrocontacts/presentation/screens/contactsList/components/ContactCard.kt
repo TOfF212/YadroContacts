@@ -27,9 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.yadrocontacts.R
-@Preview
+import com.example.yadrocontacts.presentation.screens.contactsList.entity.PresentationContact
+
 @Composable
-fun ContactCard (){
+fun ContactCard (
+    contact: PresentationContact
+){
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,7 +74,7 @@ fun ContactCard (){
                 Column(modifier = Modifier.weight(16f)) {
                     Text(
                         modifier = Modifier.alpha(0.95f),
-                        text = "Артем",
+                        text = contact.name,
                         style = MaterialTheme.typography.bodyMedium,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.ExtraBold,
@@ -80,7 +83,7 @@ fun ContactCard (){
                     )
                     Text(
                         modifier = Modifier.alpha(0.65f),
-                        text = "892265779916",
+                        text = contact.phone,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
