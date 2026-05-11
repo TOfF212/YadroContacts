@@ -21,7 +21,7 @@ class AIDLContactService : Service() {
     override fun onBind(intent: Intent): IBinder {
         return object : AIDLContactInterface.Stub(){
             override fun getContacts(callback: GetContactCallback) {
-
+                Log.d("Service", "getContacts")
                 serviceScope.launch {
 
                     val cursor = contentResolver.query(

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.util.Log
 import com.example.yadrocontacts.AIDLContactInterface
 import com.example.yadrocontacts.GetContactCallback
 import com.example.yadrocontacts.IAIDLContact
@@ -22,9 +23,6 @@ class AIDLContactSource @Inject constructor(
 
     private var aIDLContactService: AIDLContactInterface? = null
 
-    init {
-        bind()
-    }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -34,6 +32,9 @@ class AIDLContactSource @Inject constructor(
             aIDLContactService = null
         }
     }
+    init {
+        bind()
+    }
 
     fun bind(){
         val intent = Intent(context, AIDLContactService::class.java)
@@ -42,7 +43,7 @@ class AIDLContactSource @Inject constructor(
             serviceConnection,
             Context.BIND_AUTO_CREATE
         )
-
+        Log.d("AIDLContactSource", "bind")
     }
 
     fun unbind(){
@@ -50,6 +51,7 @@ class AIDLContactSource @Inject constructor(
     }
 
     fun getContacts(callback: GetContactCallback){
+        Log.d("AIDLContactSource", "getContacts")
          aIDLContactService?.getContacts(callback)
     }
 
