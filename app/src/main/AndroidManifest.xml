@@ -23,7 +23,11 @@
         <service
             android:name=".data.service.AIDLContactService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.service.ContactsService"/>
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".presentation.MainActivity"

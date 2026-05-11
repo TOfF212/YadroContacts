@@ -6,4 +6,8 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class YadroContactsApp : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+    }
 }

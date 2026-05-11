@@ -6,5 +6,5 @@ import com.example.yadrocontacts.presentation.screens.contactsList.entity.Presen
 fun Contact.toPresentationContact() = PresentationContact(
     id = id,
     name = name?:"Нет имени",
-    phone = phones.joinToString()
+    phone = phone
 )
