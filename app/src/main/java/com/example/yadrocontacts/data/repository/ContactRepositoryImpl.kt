@@ -8,11 +8,14 @@ import androidx.compose.ui.graphics.Color
 import com.example.yadrocontacts.AIDLContactInterface
 import com.example.yadrocontacts.GetContactCallback
 import com.example.yadrocontacts.IAIDLContact
+import com.example.yadrocontacts.data.mapper.toDomainContact
 import com.example.yadrocontacts.data.service.AIDLContactService
 import com.example.yadrocontacts.data.source.AIDLContactSource
 import com.example.yadrocontacts.domain.entity.Contact
 import com.example.yadrocontacts.domain.repository.ContactRepository
 import com.example.yadrocontacts.domain.util.Result
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
@@ -24,15 +27,24 @@ class ContactRepositoryImpl @Inject constructor(
 
 
     override fun getContacts(): Flow<Result<List<Contact>>>  = callbackFlow {
-        aidlContactService.getContacts(object : GetContactCallback {
-            override fun onSuccess(contacts: List<IAIDLContact?>?) {
-                TODO("Not yet implemented")
-            }
 
-            override fun asBinder(): IBinder? {
-                TODO("Not yet implemented")
-            }
-        })
+        try{
+            aidlContactService.getContacts(object : GetContactCallback.Stub() {
+                override fun onSuccess(contacts: List<IAIDLContact>) {
+                    trySend(Result.Success(contacts.map { it.toDomainContact() }))
+                        .onFailure {
+                            Log.d("ContactRepositoryImpl", "Error: ${it?.message}")
+                        }
+                }
+            })
+        } catch (e: Exception){
+            trySend(
+                Result.Error(e)
+            )
+        }
+        awaitClose {}
+
+
     }
 
     override fun getRepeatContacts(): Flow<Result<List<Contact>>> {
