@@ -57,10 +57,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MultiplePermissions(viewModel: MainViewModel) {
 
-    val permissionsToRequest = arrayOf(
-        Manifest.permission.CALL_PHONE,
-        Manifest.permission.READ_CONTACTS,
-        Manifest.permission.WRITE_CONTACTS)
+
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -74,8 +71,8 @@ fun MultiplePermissions(viewModel: MainViewModel) {
         modifier = Modifier.fillMaxSize()) {
         Text(text = "Пожалуйста, предоставьте разрешения, без них приложение не будет работать",
             modifier = Modifier.padding(20.dp))
-        Button(onClick = {launcher.launch(permissionsToRequest)}){
-            Text(text = "Multiple Permissions")
+        Button(onClick = {launcher.launch(viewModel.permissionsList)}){
+            Text(text = "Предоставить разрешения")
         }
     }
 }
