@@ -27,6 +27,8 @@ class AIDLContactSource @Inject constructor(
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             aIDLContactService = AIDLContactInterface.Stub.asInterface(service)
+            Log.d("AIDLContactSource", "serviceConnection")
+
         }
         override fun onServiceDisconnected(name: ComponentName?) {
             aIDLContactService = null
@@ -37,6 +39,8 @@ class AIDLContactSource @Inject constructor(
     }
 
     fun bind(){
+
+
         val intent = Intent(context, AIDLContactService::class.java)
         context.bindService(
             intent,
@@ -44,9 +48,12 @@ class AIDLContactSource @Inject constructor(
             Context.BIND_AUTO_CREATE
         )
         Log.d("AIDLContactSource", "bind")
+
+
     }
 
     fun unbind(){
+
         context.unbindService(serviceConnection)
     }
 

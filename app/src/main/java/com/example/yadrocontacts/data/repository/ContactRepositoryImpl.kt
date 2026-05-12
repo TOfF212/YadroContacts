@@ -16,6 +16,7 @@ import com.example.yadrocontacts.domain.repository.ContactRepository
 import com.example.yadrocontacts.domain.util.Result
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.onFailure
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
@@ -27,7 +28,7 @@ class ContactRepositoryImpl @Inject constructor(
 
 
     override fun getContacts(): Flow<Result<List<Contact>>>  = callbackFlow {
-
+        delay(100)
         try{
             aidlContactService.getContacts(object : GetContactCallback.Stub() {
                 override fun onSuccess(contacts: List<IAIDLContact>) {
@@ -51,7 +52,7 @@ class ContactRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun deleteContact(contactId: String): Flow<Result<Unit>> {
+    override fun deleteRepeatContact(): Flow<Result<Unit>> {
         TODO("Not yet implemented")
     }
 //    private fun changeColor(){
