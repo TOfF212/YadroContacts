@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DeleteContactsFAB() {
-    FloatingActionButton(onClick = {  },
+fun DeleteContactsFAB(onClick: () -> Unit) {
+    FloatingActionButton(onClick = onClick,
         shape = RoundedCornerShape(14.dp),
         containerColor = MaterialTheme.colorScheme.errorContainer,
         contentColor = MaterialTheme.colorScheme.onErrorContainer,

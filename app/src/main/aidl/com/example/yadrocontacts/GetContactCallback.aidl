@@ -9,4 +9,7 @@ import com.example.yadrocontacts.IAIDLContact;
 interface GetContactCallback {
 
     void onSuccess(in List<IAIDLContact> contacts);
+
+    void onError(String errorMessage);
+
 }

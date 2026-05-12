@@ -6,6 +6,5 @@ import com.example.yadrocontacts.domain.util.Result
 
 interface ContactRepository {
      fun getContacts(): Flow<Result<List<Contact>>>
-     fun getRepeatContacts(): Flow<Result<List<Contact>>>
-     fun deleteRepeatContact(): Flow<Result<Unit>>
+     fun deleteRepeatContact(): Flow<Result<String>>
 }

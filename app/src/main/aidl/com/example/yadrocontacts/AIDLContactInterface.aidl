@@ -11,5 +11,5 @@ interface AIDLContactInterface {
      */
     void getContacts(GetContactCallback callback);
 
-    void deleteRepeatContactsCallback(DeleteRepeatContactsCallback callback);
+    void deleteRepeatContacts(DeleteRepeatContactsCallback callback);
 }

@@ -25,12 +25,20 @@ class AIDLContactService : Service() {
             override fun getContacts(callback: GetContactCallback) {
                 Log.d("Service", "getContacts")
                 serviceScope.launch {
-                    val contacts = getContactList()
-                    callback.onSuccess(contacts)
+                    try {
+                        val contacts = getContactList()
+                        callback.onSuccess(contacts)
+                    } catch (e: Exception){
+                        Log.e("Service", "ERROR", e)
+
+                        callback.onError(e.message?: "Error")
+                    }
+
                 }
             }
 
-            override fun deleteRepeatContactsCallback(callback: DeleteRepeatContactsCallback) {
+            override fun deleteRepeatContacts(callback: DeleteRepeatContactsCallback) {
+                Log.d("Service", "deleteContacts")
 
                 serviceScope.launch {
                     try{
@@ -46,16 +54,20 @@ class AIDLContactService : Service() {
                     }
 
                     repeatContacts.forEach {
-                        contentResolver.delete(
+
+                        val deleted = contentResolver.delete(
                             ContactsContract.RawContacts.CONTENT_URI,
-                            "${ContactsContract.RawContacts.CONTACT_ID} = ?",
-                            arrayOf(it.toString())
+                            "${ContactsContract.RawContacts._ID} = ?",
+                            arrayOf(it.id.toString())
                         )
+                        Log.d("Service", "deleteContact ${it.name} $deleted")
+
                     }
                     callback.onSuccess(
                         repeatContacts.size
                     )
                     } catch (e: Exception){
+                        Log.e("Service", "ERROR", e)
                         callback.onError(e.message?: "Error")
                     }
                 }
@@ -65,6 +77,7 @@ class AIDLContactService : Service() {
     }
 }
     private fun getContactList(): List<IAIDLContact> {
+        Log.d("Service", "getContactsList")
 
         val cursor = contentResolver.query(
             ContactsContract.Contacts.CONTENT_URI,
@@ -94,13 +107,21 @@ class AIDLContactService : Service() {
                 getWebSites(contact)
 
                 contacts.add(contact)
+                Log.d("Service", "Get contact ${contact.id}")
 
             }
         }
+        Log.d("Service", "ReturnContacts")
+
         return contacts
     }
 
     private fun getPhone(contact: IAIDLContact){
+        Log.d("Service", "Phone}")
+        val phones = mutableListOf<String>()
+
+        contact.phones = emptyList<String>()
+
         val phoneCursor = contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
@@ -110,14 +131,19 @@ class AIDLContactService : Service() {
         )
         phoneCursor?.use { pc ->
             while (pc.moveToNext()) {
-                contact.phones.add(
+                phones.add(
                     pc.getString(pc.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER))?:""
                 )
 
             }
         }
+        contact.phones =phones
     }
     private fun getEmails(contact: IAIDLContact){
+        Log.d("Service", "Email}")
+        val emails = mutableListOf<String>()
+        contact.emails = emptyList<String>()
+
         val cursor  = contentResolver.query(
             ContactsContract.CommonDataKinds.Email.CONTENT_URI,
             null,
@@ -127,16 +153,21 @@ class AIDLContactService : Service() {
         )
         cursor?.use { c ->
             while (c.moveToNext()) {
-                contact.emails.add(
+                emails.add(
                     c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.ADDRESS))?:""
                 )
 
             }
         }
+        contact.emails = emails
     }
 
 
     private fun getPostalAddresses(contact: IAIDLContact){
+        Log.d("Service", "Address")
+        val addresses = mutableListOf<String>()
+        contact.postalAddresses = emptyList<String>()
+
         val cursor  = contentResolver.query(
             ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI,
             null,
@@ -146,14 +177,18 @@ class AIDLContactService : Service() {
         )
         cursor?.use { c ->
             while (c.moveToNext()) {
-                contact.postalAddresses.add(
+                addresses.add(
                     c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS))?:""
                 )
 
             }
         }
+        contact.postalAddresses = addresses
     }
     private fun getWebSites(contact: IAIDLContact){
+        Log.d("Service", "site")
+        val sites = mutableListOf<String>()
+        contact.websites = emptyList<String>()
         val cursor  = contentResolver.query(
             ContactsContract.Data.CONTENT_URI,
             null,
@@ -166,22 +201,25 @@ class AIDLContactService : Service() {
         )
         cursor?.use { c ->
             while (c.moveToNext()) {
-                contact.emails.add(
-                    c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.ADDRESS))?:""
+                sites.add(
+                    c.getString(c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Website.URL))?:""
                 )
 
             }
         }
+        contact.websites = sites
     }
 
     private fun getNotes(contact: IAIDLContact){
+        Log.d("Service", "note")
+        contact.notes = ""
         val cursor  = contentResolver.query(
             ContactsContract.Data.CONTENT_URI,
             null,
             "${ContactsContract.Data.CONTACT_ID} = ? AND ${ContactsContract.Data.MIMETYPE} = ?",
             arrayOf(
                 contact.id.toString(),
-                ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
+                ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE
             ),
             null
         )
@@ -197,13 +235,15 @@ class AIDLContactService : Service() {
     }
 
     private fun getNickname(contact: IAIDLContact){
+        Log.d("Service", "nick")
+        contact.nickname = ""
         val cursor  = contentResolver.query(
             ContactsContract.Data.CONTENT_URI,
             null,
             "${ContactsContract.Data.CONTACT_ID} = ? AND ${ContactsContract.Data.MIMETYPE} = ?",
             arrayOf(
                 contact.id.toString(),
-                ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
+                ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE
             ),
             null
         )
@@ -220,13 +260,15 @@ class AIDLContactService : Service() {
         }
     }
     private fun getOrganization(contact: IAIDLContact){
+        Log.d("Service", "org")
+        contact.organization = ""
         val cursor  = contentResolver.query(
             ContactsContract.Data.CONTENT_URI,
             null,
             "${ContactsContract.Data.CONTACT_ID} = ? AND ${ContactsContract.Data.MIMETYPE} = ?",
             arrayOf(
                 contact.id.toString(),
-                ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
+                ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE
             ),
             null
         )

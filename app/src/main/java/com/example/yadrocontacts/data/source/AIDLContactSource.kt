@@ -7,10 +7,12 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import com.example.yadrocontacts.AIDLContactInterface
+import com.example.yadrocontacts.DeleteRepeatContactsCallback
 import com.example.yadrocontacts.GetContactCallback
 import com.example.yadrocontacts.IAIDLContact
 import com.example.yadrocontacts.data.service.AIDLContactService
 import com.example.yadrocontacts.domain.entity.Contact
+import com.example.yadrocontacts.domain.useCase.contact.DeleteRepeatContacts
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -60,6 +62,10 @@ class AIDLContactSource @Inject constructor(
     fun getContacts(callback: GetContactCallback){
         Log.d("AIDLContactSource", "getContacts")
          aIDLContactService?.getContacts(callback)
+    }
+
+    fun deleteRepeatContacts(callback: DeleteRepeatContactsCallback){
+        aIDLContactService?.deleteRepeatContacts(callback)
     }
 
 }
