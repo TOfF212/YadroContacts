@@ -65,7 +65,9 @@ fun ContactListScreen(
 
                     LazyColumn() {
                         items((ui as UiState.Success).contacts.size){
-                            ContactCard(contact = (ui as UiState.Success).contacts[it])
+                            ContactCard(contact = (ui as UiState.Success).contacts[it], onClick = {
+                                viewModel.callPhone((ui as UiState.Success).contacts[it])
+                            })
                         }
                     }
 

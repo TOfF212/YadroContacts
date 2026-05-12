@@ -3,10 +3,14 @@ package com.example.yadrocontacts.presentation
 import android.Manifest
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.yadrocontacts.domain.entity.Contact
+import com.example.yadrocontacts.presentation.screens.contactsList.entity.PresentationContact
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -63,4 +67,7 @@ class MainViewModel @Inject constructor(
     fun dismissDialog(){
         _visiblePermissionDialogQueue.value = visiblePermissionDialogQueue.value.drop(1)
     }
+
+
+
 }

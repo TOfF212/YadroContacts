@@ -1,7 +1,11 @@
 package com.example.yadrocontacts.presentation.screens.contactsList
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.yadrocontacts.domain.useCase.call.CreateCall
 import com.example.yadrocontacts.domain.useCase.contact.DeleteRepeatContacts
 import com.example.yadrocontacts.domain.useCase.contact.GetContacts
 import com.example.yadrocontacts.presentation.screens.contactsList.entity.UiState
@@ -11,8 +15,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import com.example.yadrocontacts.domain.util.Result
+import com.example.yadrocontacts.presentation.screens.contactsList.entity.PresentationContact
 import com.example.yadrocontacts.presentation.screens.contactsList.entity.UiEvent
 import com.example.yadrocontacts.presentation.util.toPresentationContact
+import dagger.hilt.android.internal.Contexts.getApplication
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -23,7 +30,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class ContactListViewModel @Inject constructor(
     private val deleteContactsUseCase: DeleteRepeatContacts,
-    private val getContactsUseCase: GetContacts
+    private val getContactsUseCase: GetContacts,
+    private val createCall: CreateCall
 ): ViewModel() {
 
     private val _event = MutableSharedFlow<UiEvent>()
@@ -73,5 +81,14 @@ class ContactListViewModel @Inject constructor(
             }
         }
     }
+
+    fun callPhone(contact: PresentationContact){
+        if (contact.phone == "") {
+            return
+        }
+        val phone = contact.phone.split(",")[0]
+        createCall(phone)
+    }
+
 
 }

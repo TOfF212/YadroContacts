@@ -31,14 +31,15 @@ import com.example.yadrocontacts.presentation.screens.contactsList.entity.Presen
 
 @Composable
 fun ContactCard (
-    contact: PresentationContact
+    contact: PresentationContact,
+    onClick: () -> Unit
 ){
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 5.dp, bottom = 3.dp, start = 7.dp, end = 7.dp),
         shape = RoundedCornerShape(14.dp),
-        onClick = {  },
+        onClick = onClick,
     ) {
         Box(
             modifier = Modifier
