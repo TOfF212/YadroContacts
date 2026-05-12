@@ -31,6 +31,34 @@ class AIDLContactService : Service() {
             }
 
             override fun deleteRepeatContactsCallback(callback: DeleteRepeatContactsCallback) {
+
+                serviceScope.launch {
+                    try{
+
+
+                    val contacts = getContactList()
+                    val groupedContacts = contacts.groupBy { it.toNormalizeContact() }
+                    val repeatContacts = groupedContacts.values.filter { it.size > 1 }.flatMap { it.drop(1) }
+
+                    if (repeatContacts.isEmpty()){
+                        callback.onRepeatContactsNotFound()
+                        return@launch
+                    }
+
+                    repeatContacts.forEach {
+                        contentResolver.delete(
+                            ContactsContract.RawContacts.CONTENT_URI,
+                            "${ContactsContract.RawContacts.CONTACT_ID} = ?",
+                            arrayOf(it.toString())
+                        )
+                    }
+                    callback.onSuccess(
+                        repeatContacts.size
+                    )
+                    } catch (e: Exception){
+                        callback.onError(e.message?: "Error")
+                    }
+                }
             }
 
 
