@@ -8,8 +8,10 @@ interface DeleteRepeatContactsCallback {
      * Demonstrates some basic types that you can use as parameters
      * and return values in AIDL.
      */
-        void onSuccess();
+        void onSuccess(int deletedContacts);
 
+        void onRepeatContactsNotFound();
 
+        void onError(String errorMessage);
 
 }

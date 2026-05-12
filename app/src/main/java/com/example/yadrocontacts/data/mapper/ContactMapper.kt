@@ -5,12 +5,12 @@ import com.example.yadrocontacts.domain.entity.Contact
 
 fun IAIDLContact.toDomainContact() = Contact(
     id = id,
-    phone = phone,
+    phones = phones,
     name = name,
-    nickname = "",
-    email = "",
-    organization = "",
-    notes = "",
-    postalAddresses = "",
-    websites = "",
+    nickname = nickname,
+    emails = emails,
+    organization = organization,
+    notes = notes,
+    postalAddresses = postalAddresses,
+    websites =  websites,
 )

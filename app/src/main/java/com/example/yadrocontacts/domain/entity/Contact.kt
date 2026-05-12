@@ -2,12 +2,12 @@ package com.example.yadrocontacts.domain.entity
 
 data class Contact(
     val id: Long,
-    val phone: String,
+    val phones: List<String>,
     val name: String,
     val nickname: String,
-    val email: String,
+    val emails: List<String>,
     val organization: String,
     val notes: String,
-    val postalAddresses: String,
-    val websites: String
+    val postalAddresses: List<String>,
+    val websites: List<String>
 )
